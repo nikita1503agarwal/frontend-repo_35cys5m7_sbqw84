@@ -23,15 +23,15 @@ export default function Header({ onSearch, onOpenCart, onOpenLogin, cartCount = 
     <header className={`fixed top-0 inset-x-0 z-40 transition-all ${scrolled ? 'backdrop-blur-md bg-slate-950/60 border-b border-white/10' : 'bg-transparent'}`}>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="h-16 flex items-center justify-between">
-          <a href="#home" className="flex items-center gap-2 text-white">
+          <a href="/" className="flex items-center gap-2 text-white">
             <Camera className="h-6 w-6" />
             <span className="font-semibold tracking-wide" style={{ fontFamily: 'Montserrat, Inter, sans-serif' }}>BlueFrame Studio</span>
           </a>
 
           <nav className="hidden md:flex items-center gap-1">
-            <a href="#gallery" className={linkClass}>Gallery</a>
-            <a href="#about" className={linkClass}>About</a>
-            <a href="#contact" className={linkClass}>Contact</a>
+            <a href="/gallery" className={linkClass}>Gallery</a>
+            <a href="/about" className={linkClass}>About</a>
+            <a href="/contact" className={linkClass}>Contact</a>
           </nav>
 
           <div className="hidden md:flex items-center gap-3">
@@ -74,9 +74,9 @@ export default function Header({ onSearch, onOpenCart, onOpenLogin, cartCount = 
               />
             </form>
             <div className="flex flex-col gap-1">
-              <a href="#gallery" className={linkClass}>Gallery</a>
-              <a href="#about" className={linkClass}>About</a>
-              <a href="#contact" className={linkClass}>Contact</a>
+              <a href="/gallery" className={linkClass}>Gallery</a>
+              <a href="/about" className={linkClass}>About</a>
+              <a href="/contact" className={linkClass}>Contact</a>
               <button onClick={onOpenCart} className="text-left text-gray-200/90 hover:text-white transition-colors px-3 py-2 rounded-md text-sm font-medium">Cart</button>
               <button onClick={onOpenLogin} className="text-left text-gray-200/90 hover:text-white transition-colors px-3 py-2 rounded-md text-sm font-medium">Login</button>
             </div>
