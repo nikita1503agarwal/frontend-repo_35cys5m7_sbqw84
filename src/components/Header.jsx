@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
-import { Menu, X, Search, ShoppingCart, Camera } from 'lucide-react'
+import { Menu, X, Search, ShoppingCart, Camera, LogIn } from 'lucide-react'
 
-export default function Header({ onSearch, onOpenCart, cartCount = 0 }) {
+export default function Header({ onSearch, onOpenCart, onOpenLogin, cartCount = 0 }) {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [query, setQuery] = useState('')
   const [scrolled, setScrolled] = useState(false)
@@ -52,7 +52,9 @@ export default function Header({ onSearch, onOpenCart, cartCount = 0 }) {
                 </span>
               )}
             </button>
-            <a href="#login" className="text-xs px-3 py-2 rounded-md border border-white/10 text-gray-100 hover:bg-white/10">Login</a>
+            <button onClick={onOpenLogin} className="flex items-center gap-1 text-xs px-3 py-2 rounded-md border border-white/10 text-gray-100 hover:bg-white/10">
+              <LogIn className="h-4 w-4" /> Login
+            </button>
           </div>
 
           <button onClick={() => setMobileOpen(!mobileOpen)} className="md:hidden p-2 rounded-md text-white hover:bg-white/10">
@@ -76,6 +78,7 @@ export default function Header({ onSearch, onOpenCart, cartCount = 0 }) {
               <a href="#about" className={linkClass}>About</a>
               <a href="#contact" className={linkClass}>Contact</a>
               <button onClick={onOpenCart} className="text-left text-gray-200/90 hover:text-white transition-colors px-3 py-2 rounded-md text-sm font-medium">Cart</button>
+              <button onClick={onOpenLogin} className="text-left text-gray-200/90 hover:text-white transition-colors px-3 py-2 rounded-md text-sm font-medium">Login</button>
             </div>
           </div>
         )}

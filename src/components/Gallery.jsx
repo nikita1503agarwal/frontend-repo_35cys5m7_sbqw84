@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
 import { ZoomIn } from 'lucide-react'
 
 const sampleImages = [
@@ -13,13 +12,16 @@ const sampleImages = [
 
 const categories = ['all', 'portrait', 'nature', 'events']
 
-export default function Gallery({ onAddToCart }) {
+export default function Gallery({ onAddToCart, search = '' }) {
   const [filter, setFilter] = useState('all')
   const [lightbox, setLightbox] = useState(null)
 
   const images = useMemo(() => {
-    return filter === 'all' ? sampleImages : sampleImages.filter(i => i.category === filter)
-  }, [filter])
+    const base = filter === 'all' ? sampleImages : sampleImages.filter(i => i.category === filter)
+    if (!search) return base
+    const q = search.toLowerCase()
+    return base.filter(i => i.title.toLowerCase().includes(q) || i.category.toLowerCase().includes(q))
+  }, [filter, search])
 
   useEffect(() => {
     const onKey = (e) => e.key === 'Escape' && setLightbox(null)
@@ -46,14 +48,10 @@ export default function Gallery({ onAddToCart }) {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {images.map((img, idx) => (
-            <motion.div
+          {images.map((img) => (
+            <div
               key={img.id}
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: idx * 0.05 }}
-              className="group relative overflow-hidden rounded-xl bg-slate-900/40 border border-white/10"
+              className="group relative overflow-hidden rounded-xl bg-slate-900/40 border border-white/10 opacity-0 translate-y-2 will-change-transform will-change-opacity animate-[fadeInUp_0.6s_ease-out_forwards]"
             >
               <img
                 src={`${img.url}`}
@@ -72,32 +70,34 @@ export default function Gallery({ onAddToCart }) {
                   <button onClick={() => onAddToCart && onAddToCart(img)} className="px-3 py-2 rounded-md bg-blue-500 hover:bg-blue-400 text-white text-sm transition-colors">Add to Cart</button>
                 </div>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>
 
-      <AnimatePresence>
-        {lightbox && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-6"
-            onClick={() => setLightbox(null)}
-          >
-            <motion.img
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              transition={{ type: 'spring', stiffness: 120, damping: 14 }}
-              src={lightbox.url}
-              alt={lightbox.title}
-              className="max-h-[80vh] w-auto rounded-lg shadow-2xl"
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {lightbox && (
+        <div
+          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-6 transition-opacity"
+          onClick={() => setLightbox(null)}
+          style={{ animation: 'fadeIn 200ms ease-out' }}
+        >
+          <img
+            src={lightbox.url}
+            alt={lightbox.title}
+            className="max-h-[80vh] w-auto rounded-lg shadow-2xl"
+            style={{ animation: 'scaleIn 240ms ease-out' }}
+          />
+        </div>
+      )}
+
+      <style>{`
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translateY(8px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
+        @keyframes scaleIn { from { opacity: 0; transform: scale(.96) } to { opacity: 1; transform: scale(1) } }
+      `}</style>
     </section>
   )
 }
